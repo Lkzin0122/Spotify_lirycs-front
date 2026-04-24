@@ -42,6 +42,11 @@ function App() {
         setLastSyncTime(Date.now());
       } catch (error) {
         console.error("Erro ao buscar música:", error);
+
+        setTrack({
+          is_playing: false,
+          message: "Conecte sua conta do Spotify."
+        });
       }
     }
 
