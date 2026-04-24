@@ -29,19 +29,21 @@ function App() {
   const [lastSyncTime, setLastSyncTime] = useState(Date.now());
 
   useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const session = params.get("session");
+    const params = new URLSearchParams(window.location.search);
+    const sessionFromUrl = params.get("session");
 
-  console.log("URL COMPLETA:", window.location.href);
-  console.log("SESSION DA URL:", session);
+    if (sessionFromUrl) {
+      localStorage.setItem("spotify_session", sessionFromUrl);
+    }
 
-  if (session) {
-    localStorage.setItem("spotify_session", session);
+    const session = localStorage.getItem("spotify_session") || sessionFromUrl;
 
-    // ⛔ comenta isso por enquanto
-    // window.history.replaceState({}, document.title, "/");
-  }
-}, []);
+    const res = await fetch(`${API_URL}?session=${session || ""}`, {
+      headers: {
+        "x-session-id": session || "",
+      },
+    });
+  }, []);
 
   useEffect(() => {
     async function fetchTrack() {
