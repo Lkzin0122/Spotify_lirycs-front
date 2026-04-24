@@ -2,7 +2,12 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import '../pages/App.css'
 
-const API_URL = "http://127.0.0.1:8000/current";
+const BACKEND_URL = import.meta.env.VITE_API_URL;
+const API_URL = `${BACKEND_URL}/current`;
+
+function connectSpotify() {
+  window.location.href = `${BACKEND_URL}/login`;
+}
 
 const OFFSET = 0.3;
 
@@ -71,17 +76,21 @@ function App() {
       </div>
     );
   }
+  
+if (!track || track.error || !track.is_playing) {
+  return (
+    <div className="container">
+      <div className="card">
+        <h1>Spotify Lyrics</h1>
+        <p>{track?.message || "Conecte sua conta do Spotify."}</p>
 
-  if (!track.is_playing) {
-    return (
-      <div className="container">
-        <div className="card">
-          <h1>Spotify Lyrics</h1>
-          <p>Nenhuma música tocando no momento.</p>
-        </div>
+        <button onClick={connectSpotify}>
+          Connect Spotify
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="container">
