@@ -20,7 +20,10 @@ function App() {
   useEffect(() => {
     async function fetchTrack() {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL, {
+          credentials: "include",
+        });
+
         const data = await res.json();
 
         setTrack((oldTrack) => {
@@ -76,21 +79,21 @@ function App() {
       </div>
     );
   }
-  
-if (!track || track.error || !track.is_playing) {
-  return (
-    <div className="container">
-      <div className="card">
-        <h1>Spotify Lyrics</h1>
-        <p>{track?.message || "Conecte sua conta do Spotify."}</p>
 
-        <button onClick={connectSpotify}>
-          Connect Spotify
-        </button>
+  if (!track || track.error || !track.is_playing) {
+    return (
+      <div className="container">
+        <div className="card">
+          <h1>Spotify Lyrics</h1>
+          <p>{track?.message || "Conecte sua conta do Spotify."}</p>
+
+          <button onClick={connectSpotify}>
+            Connect Spotify
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="container">
