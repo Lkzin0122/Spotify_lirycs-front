@@ -12,6 +12,17 @@ function connectSpotify() {
 const OFFSET = 0.3;
 
 function App() {
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const session = params.get("session");
+
+    if (session) {
+      localStorage.setItem("spotify_session", session);
+      window.history.replaceState({}, document.title, "/");
+    }
+  }, []);
+
   const [track, setTrack] = useState(null);
   const [currentLine, setCurrentLine] = useState("");
   const [baseProgress, setBaseProgress] = useState(0);
@@ -20,8 +31,12 @@ function App() {
   useEffect(() => {
     async function fetchTrack() {
       try {
+        const session = localStorage.getItem("spotify_session");
+
         const res = await fetch(API_URL, {
-          credentials: "include",
+          headers: {
+            "x-session-id": session || "",
+          },
         });
 
         const data = await res.json();
